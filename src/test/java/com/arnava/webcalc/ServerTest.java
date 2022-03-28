@@ -10,7 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ServerTest {
 
     @Test
-    void checkForConnection() throws IOException {
+    void getCalculationResultFromServer() throws IOException {
         runServer();
         Process clientProcess = runClientProcess();
         PrintWriter printWriter = new PrintWriter(clientProcess.getOutputStream(), true);
