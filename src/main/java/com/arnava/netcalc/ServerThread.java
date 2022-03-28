@@ -1,4 +1,4 @@
-package com.arnava.webcalc;
+package com.arnava.netcalc;
 
 import com.arnava.interpreter.calculator.Calculator;
 import com.arnava.interpreter.exceptions.SyntaxErrorException;

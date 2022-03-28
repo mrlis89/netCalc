@@ -1,4 +1,4 @@
-package com.arnava.webcalc;
+package com.arnava.netcalc;
 
 public class Main {
     public static void main(String[] args) {

@@ -1,6 +1,4 @@
-package com.arnava.webcalc;
-
-import com.arnava.interpreter.exceptions.SyntaxErrorException;
+package com.arnava.netcalc;
 
 import java.io.*;
 import java.net.ServerSocket;

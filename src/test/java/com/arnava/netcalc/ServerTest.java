@@ -1,4 +1,4 @@
-package com.arnava.webcalc;
+package com.arnava.netcalc;
 
 import org.junit.jupiter.api.Test;
 
