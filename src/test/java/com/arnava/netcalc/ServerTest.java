@@ -14,8 +14,19 @@ class ServerTest {
     @Test
     void run5000ClientThreads() throws InterruptedException {
         runServerThread(6060, 0);
-        for (int i = 0; i < 5000; i++) {
-            runClientThread();
+        ArrayList<Thread> threads = new ArrayList<>(11);
+        for (int i = 0; i < 11; i++) {
+            threads.add(new Thread(new ClientImpl(6060, "45+5")));
+        }
+        ;
+        while (true) {
+            for (Thread currentThread: threads) {
+                {
+                    if (!currentThread.isAlive()) {
+                        currentThread.start();
+                    } else currentThread.interrupt();
+                }
+            }
         }
     }
 
@@ -90,7 +101,7 @@ class ServerTest {
 
                     sender.println(expression);
                     String result = receiver.readLine();
-//                    System.out.println(result);
+                    System.out.println(result);
                     assertThat(result).isEqualTo("result = 50");
                     sender.println("exit");
             } catch (UnknownHostException ex) {
@@ -98,6 +109,7 @@ class ServerTest {
             } catch (IOException ex) {
                 System.out.println("I/O error: " + ex.getMessage());
             }
+            Thread.currentThread().interrupt();
         }
     }
 }
