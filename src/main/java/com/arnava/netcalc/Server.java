@@ -6,31 +6,27 @@ import java.net.Socket;
 
 public class Server {
     private final int port;
-    ServerSocket serverSocket;
+    private final int delay;
 
-    public Server(int port) {
+    public Server(int port, int delay) {
         this.port = port;
+        this.delay = delay;
     }
 
     public void start() {
         try (ServerSocket serverSocket = new ServerSocket(port)) {
-            this.serverSocket = serverSocket;
             System.out.println("Server is listening on port " + port);
 
             while (true) {
                 Socket socket = serverSocket.accept();
                 System.out.println("New client connected");
-                new ServerThread(socket).start();
+                new ServerThread(socket, delay).start();
             }
 
         } catch (IOException ex) {
             System.out.println("Server exception: " + ex.getMessage());
             ex.printStackTrace();
         }
-    }
-
-    public void stop() throws IOException {
-        this.serverSocket.close();
     }
 }
 

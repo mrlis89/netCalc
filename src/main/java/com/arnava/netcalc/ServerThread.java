@@ -8,9 +8,11 @@ import java.net.Socket;
 
 public class ServerThread extends Thread {
     private final Socket socket;
+    private final int delay;
 
-    public ServerThread(Socket socket) {
+    public ServerThread(Socket socket, int delay) {
         this.socket = socket;
+        this.delay = delay;
     }
 
     public void run(){
@@ -30,10 +32,11 @@ public class ServerThread extends Thread {
                     System.out.println("The client was disconnected");
                     break;
                 }
+                Thread.sleep(delay);
                 writer.println("result = " + calculator.calculate(expression));
             }
             socket.close();
-        } catch (IOException | SyntaxErrorException ex) {
+        } catch (IOException | SyntaxErrorException | InterruptedException ex) {
             System.out.println("Server exception: " + ex.getMessage());
         }
     }
