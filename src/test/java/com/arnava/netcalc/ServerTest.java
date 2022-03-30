@@ -12,22 +12,23 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ServerTest {
 
     @Test
-    void run5000ClientThreads() throws InterruptedException {
+    void run50ClientThreads() throws InterruptedException {
         runServerThread(6060, 0);
-        ArrayList<Thread> threads = new ArrayList<>(11);
-        for (int i = 0; i < 11; i++) {
-            threads.add(new Thread(new ClientImpl(6060, "45+5")));
+        int threadCount = 50;
+        ArrayList<Thread> threads = new ArrayList<>(threadCount);
+        for (int i = 0; i < threadCount; i++) {
+            Thread thread = new Thread(new ClientImpl(6060, "45+5"));
+            threads.add(thread);
         }
-        ;
-        while (true) {
-            for (Thread currentThread: threads) {
-                {
-                    if (!currentThread.isAlive()) {
-                        currentThread.start();
-                    } else currentThread.interrupt();
+        Boolean threadIsAlive;
+        do {
+            threadIsAlive = false;
+            for (Thread currentThread : threads) {
+                if (currentThread.isAlive()) {
+                    threadIsAlive = true;
                 }
             }
-        }
+        } while (threadIsAlive);
     }
 
     @Test
@@ -95,21 +96,20 @@ class ServerTest {
             try (Socket socket = new Socket("localhost", port)) {
 //                System.out.println("Connected to server");
                 OutputStream output = socket.getOutputStream();
-                    PrintWriter sender = new PrintWriter(output, true);
-                    InputStream input = socket.getInputStream();
-                    BufferedReader receiver = new BufferedReader(new InputStreamReader(input));
+                PrintWriter sender = new PrintWriter(output, true);
+                InputStream input = socket.getInputStream();
+                BufferedReader receiver = new BufferedReader(new InputStreamReader(input));
 
-                    sender.println(expression);
-                    String result = receiver.readLine();
-                    System.out.println(result);
-                    assertThat(result).isEqualTo("result = 50");
-                    sender.println("exit");
+                sender.println(expression);
+                String result = receiver.readLine();
+                System.out.println(result);
+                assertThat(result).isEqualTo("result = 50");
+                sender.println("exit");
             } catch (UnknownHostException ex) {
                 System.out.println("Server not found: " + ex.getMessage());
             } catch (IOException ex) {
                 System.out.println("I/O error: " + ex.getMessage());
             }
-            Thread.currentThread().interrupt();
         }
     }
 }
